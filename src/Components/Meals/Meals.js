@@ -10,12 +10,12 @@ const Meals = () => {
 
     useEffect(() => {
         const fetchMeals = async () => {
-            const res = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+            const res = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchText}`);
             const data = await res.json();
-            setMeals(data.meals);
+            setMeals(data?.meals);
         }
         fetchMeals();
-    }, []);
+    }, [searchText]);
 
     const handleMeal = (meal) => {
         let newMeals = [];
@@ -36,16 +36,10 @@ const Meals = () => {
             <div className="grid grid-cols-5">
                 <div className="grid grid-cols-3 col-span-4 w-11/12 mx-auto gap-6 mt-10">
                     {
-                        meals
-                            .filter((meal) => {
-                                if (meal === "") {
-                                    return meal;
-                                } else if (meal.strMeal.toLocaleLowerCase().includes(searchText.toLocaleLowerCase())) {
-                                    return meal;
-                                }
-                                return 0;
-                            }).map(meal => <Meal key={meal.idMeal} meal={meal} handleMeal={handleMeal}></Meal>)
+                        meals ?
+                            meals.map(meal => <Meal key={meal.idMeal} meal={meal} handleMeal={handleMeal}></Meal>) : 'No Meals Found!'
                     }
+
                 </div>
                 <MealSideBar clearMeal={clearMeal} singleMeal={singleMeal}></MealSideBar>
 
